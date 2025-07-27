@@ -1,0 +1,116 @@
+{% extends 'layout.html' %} {% block title %}Jadwal KRL Commuter Line{% endblock
+%} {% block content %}
+<div class="text-center mb-5">
+  <h1 class="display-5 fw-bold kai-text-blue">Jadwal KRL Commuter Line</h1>
+  <p class="fs-4 text-muted">Pilih stasiun keberangkatan Anda.</p>
+</div>
+
+<!-- Dropdown untuk memilih stasiun -->
+<div class="row justify-content-center mb-4">
+  <div class="col-md-6">
+    <label for="pilih-stasiun" class="form-label fs-5"
+      ><i class="bi bi-geo-alt-fill"></i> Stasiun Keberangkatan</label
+    >
+    <select class="form-select form-select-lg" id="pilih-stasiun">
+      {% for stasiun in stasiun_list %}
+      <option value="{{ stasiun }}">{{ stasiun }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+<!-- Tabel Gabungan -->
+<div class="card shadow">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="kai-bg-blue text-white">
+          <tr>
+            <th scope="col">Kode Kereta</th>
+            <!-- PERUBAHAN DI SINI: Tambahkan class="text-center" -->
+            <th scope="col" class="text-center">Tujuan Akhir</th>
+            <th scope="col" class="text-end">Waktu Berangkat</th>
+          </tr>
+        </thead>
+        <tbody id="jadwal-tbody">
+          <!-- Data jadwal akan dimuat di sini oleh JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Template untuk loading spinner -->
+<template id="loading-template">
+  <tr>
+    <td colspan="3" class="text-center py-5">
+      <div
+        class="spinner-border kai-text-blue"
+        style="width: 3rem; height: 3rem"
+        role="status"
+      >
+        <span class="visually-hidden">Memuat...</span>
+      </div>
+      <p class="mt-2 text-muted">Memuat jadwal...</p>
+    </td>
+  </tr>
+</template>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const stasiunSelector = document.getElementById("pilih-stasiun");
+    const jadwalTbody = document.getElementById("jadwal-tbody");
+    const loadingTemplate = document.getElementById("loading-template");
+
+    function fetchJadwal(stasiun) {
+      jadwalTbody.innerHTML = "";
+      jadwalTbody.appendChild(loadingTemplate.content.cloneNode(true));
+
+      fetch(`/api/commuter/jadwal/${stasiun}`)
+        .then((response) => response.json())
+        .then((data) => {
+          jadwalTbody.innerHTML = "";
+
+          if (data.length === 0) {
+            jadwalTbody.innerHTML =
+              '<tr><td colspan="3" class="text-center text-muted py-4">Tidak ada jadwal keberangkatan dari stasiun ini.</td></tr>';
+            return;
+          }
+
+          data.forEach((jadwal) => {
+            const row = document.createElement("tr");
+
+            const badgeColor =
+              jadwal.tujuan_akhir === "Yogyakarta"
+                ? "bg-primary"
+                : "bg-success";
+
+            row.innerHTML = `
+                            <td class="text-muted small">${
+                              jadwal.nama_kereta.match(/\(([^)]+)\)/)[1]
+                            }</td>
+                            <td class="text-center"><span class="badge ${badgeColor}">${
+              jadwal.tujuan_akhir
+            }</span></td>
+                            <td class="fs-5 fw-bold text-end">${
+                              jadwal.waktu_berangkat
+                            }</td>
+                        `;
+            jadwalTbody.appendChild(row);
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          jadwalTbody.innerHTML =
+            '<tr><td colspan="3" class="text-center text-danger py-4">Gagal memuat jadwal.</td></tr>';
+        });
+    }
+
+    stasiunSelector.addEventListener("change", function () {
+      fetchJadwal(this.value);
+    });
+
+    fetchJadwal(stasiunSelector.value);
+  });
+</script>
+{% endblock %}

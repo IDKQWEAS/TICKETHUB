@@ -1,0 +1,50 @@
+{% extends 'layout.html' %} {% block title %}Hasil Pencarian Tiket{% endblock %}
+{% block content %}
+<h2 class="mb-4">
+  Hasil Pencarian untuk Tanggal <span class="kai-text-blue">{{ tanggal }}</span>
+</h2>
+
+{% if hasil %} {% for jadwal in hasil %}
+<div class="card shadow-sm mb-3">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col-md-7">
+        <h5 class="card-title fw-bold kai-text-blue">
+          {{ jadwal.nama_kereta }}
+        </h5>
+        <p class="mb-1">
+          <span class="badge bg-secondary">{{ jadwal.kelas }}</span>
+        </p>
+        <p class="card-text fs-5">
+          {{ jadwal.stasiun_asal }} &rarr; {{ jadwal.stasiun_tujuan }}
+        </p>
+        <p class="card-text">
+          Berangkat:
+          <strong>{{ jadwal.waktu_berangkat.strftime('%H:%M') }}</strong> -
+          Tiba: <strong>{{ jadwal.waktu_tiba.strftime('%H:%M') }}</strong>
+        </p>
+      </div>
+      <div class="col-md-5 text-md-end">
+        <h5 class="kai-text-orange">
+          Rp {{ "{:,.0f}".format(jadwal.harga) }} / orang
+        </h5>
+        <p class="text-muted">Sisa kursi: {{ jadwal.sisa_kursi }}</p>
+        <form
+          action="{{ url_for('pesan', id_jadwal=jadwal.id) }}"
+          method="GET"
+          class="d-grid"
+        >
+          <button type="submit" class="btn btn-kai-orange">
+            Pesan Sekarang
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% else %}
+<div class="alert alert-warning" role="alert">
+  Maaf, tidak ada jadwal yang tersedia untuk rute dan tanggal yang Anda pilih.
+</div>
+<a href="{{ url_for('index') }}" class="btn btn-secondary">Cari Lagi</a>
+{% endif %} {% endblock %}

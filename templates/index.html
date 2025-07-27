@@ -1,0 +1,42 @@
+{% extends 'layout.html' %} {% block title %}Pilih Layanan{% endblock %} {%
+block content %}
+<div class="text-center mb-5">
+  <h1 class="display-4 fw-bold">Selamat Datang di Tickethub</h1>
+  <p class="fs-4 text-muted">Silakan pilih layanan yang Anda butuhkan.</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <a
+      href="{{ url_for('kereta_jarak_jauh') }}"
+      class="service-choice-card shadow"
+    >
+      <img
+        src="https://images.pexels.com/photos/1039083/pexels-photo-1039083.jpeg"
+        class="card-img"
+        alt="Kereta Jarak Jauh"
+      />
+      <div class="card-img-overlay text-white">
+        <i class="bi bi-train-front service-icon"></i>
+        <h2 class="card-title">Kereta Api Jarak Jauh</h2>
+        <p class="card-text">Pesan tiket untuk perjalanan antar kota.</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="col-md-6">
+    <a href="{{ url_for('commuter') }}" class="service-choice-card shadow">
+      <img
+        src="https://images.pexels.com/photos/18094395/pexels-photo-18094395/free-photo-of-a-commuter-train-at-a-station.jpeg"
+        class="card-img"
+        alt="Commuter Line"
+      />
+      <div class="card-img-overlay text-white">
+        <i class="bi bi-train-lightrail-front service-icon"></i>
+        <h2 class="card-title">KRL Commuter Line</h2>
+        <p class="card-text">Lihat jadwal perjalanan KRL terbaru.</p>
+      </div>
+    </a>
+  </div>
+</div>
+{% endblock %}

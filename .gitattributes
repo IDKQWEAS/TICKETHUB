@@ -1,0 +1,12 @@
+# Otomatis atur teks file pakai line ending yang konsisten (LF di repo, CRLF di Windows)
+* text=auto
+
+# Force file .sql pakai LF (biar tidak berubah-ubah line ending)
+*.sql text eol=lf
+
+# Optional: Pakai LF juga untuk file-code penting
+*.js text eol=lf
+*.php text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.sh text eol=lf

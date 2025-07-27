@@ -1,0 +1,95 @@
+{% extends 'layout.html' %} {% block title %}Cari Tiket Kereta Api Jarak Jauh{%
+endblock %} {% block content %}
+<div class="text-center mb-5">
+  <h1 class="display-5 fw-bold kai-text-blue">
+    Pesan Tiket Kereta Api Jarak Jauh
+  </h1>
+  <p class="fs-4 text-muted">
+    Cari jadwal dan pesan tiket untuk perjalanan antar kota.
+  </p>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <div class="card shadow">
+      <div class="card-header kai-bg-blue text-white">
+        <h4 class="mb-0">Cari Jadwal Kereta</h4>
+      </div>
+      <div class="card-body p-4">
+        <form action="{{ url_for('cari_tiket') }}" method="POST">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-6">
+              <label for="stasiun_asal" class="form-label"
+                ><i class="bi bi-train-front"></i> Stasiun Asal</label
+              >
+              <select
+                class="form-select form-select-lg"
+                id="stasiun_asal"
+                name="stasiun_asal"
+                required
+              >
+                <option selected disabled value="">
+                  Pilih stasiun asal...
+                </option>
+                {% for stasiun in stasiun_asal_list %}
+                <option value="{{ stasiun[0] }}">{{ stasiun[0] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="stasiun_tujuan" class="form-label"
+                ><i class="bi bi-geo-alt-fill"></i> Stasiun Tujuan</label
+              >
+              <select
+                class="form-select form-select-lg"
+                id="stasiun_tujuan"
+                name="stasiun_tujuan"
+                required
+              >
+                <option selected disabled value="">
+                  Pilih stasiun tujuan...
+                </option>
+                {% for stasiun in stasiun_tujuan_list %}
+                <option value="{{ stasiun[0] }}">{{ stasiun[0] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="tanggal_berangkat" class="form-label"
+                ><i class="bi bi-calendar-event"></i> Tanggal Berangkat</label
+              >
+              <input
+                type="date"
+                class="form-control form-control-lg"
+                id="tanggal_berangkat"
+                name="tanggal_berangkat"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="jumlah_penumpang" class="form-label"
+                ><i class="bi bi-people-fill"></i> Jumlah Penumpang</label
+              >
+              <input
+                type="number"
+                class="form-control form-control-lg"
+                id="jumlah_penumpang"
+                name="jumlah_penumpang"
+                min="1"
+                max="10"
+                value="1"
+                required
+              />
+            </div>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-kai-orange btn-lg">
+              <i class="bi bi-search"></i> Cari Tiket
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

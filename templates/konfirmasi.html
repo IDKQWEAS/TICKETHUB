@@ -1,0 +1,85 @@
+{% extends 'layout.html' %} {% block title %}Konfirmasi Pemesanan{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h2 class="mb-4 text-center">Konfirmasi Pesanan Anda</h2>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-header kai-bg-blue text-white">
+        <h5 class="mb-0">Detail Perjalanan</h5>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">
+          {{ jadwal.nama_kereta }} ({{ jadwal.kelas }})
+        </h4>
+        <p class="card-text fs-5">
+          <strong class="kai-text-blue">{{ jadwal.stasiun_asal }}</strong>
+          &rarr;
+          <strong class="kai-text-blue">{{ jadwal.stasiun_tujuan }}</strong>
+        </p>
+        <p>
+          <strong>Waktu Berangkat:</strong> {{
+          jadwal.waktu_berangkat.strftime('%d %B %Y, %H:%M') }}<br />
+          <strong>Waktu Tiba:</strong> {{ jadwal.waktu_tiba.strftime('%d %B %Y,
+          %H:%M') }}
+        </p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-header kai-bg-blue text-white">
+        <h5 class="mb-0">Detail Pembayaran</h5>
+      </div>
+      <div class="card-body">
+        <dl class="row fs-5">
+          <dt class="col-sm-4">Harga per Tiket</dt>
+          <dd class="col-sm-8">Rp {{ "{:,.0f}".format(jadwal.harga) }}</dd>
+
+          <dt class="col-sm-4">Jumlah Penumpang</dt>
+          <dd class="col-sm-8">{{ jumlah }} orang</dd>
+
+          <dt class="col-sm-4 border-top pt-2">Total Harga</dt>
+          <dd class="col-sm-8 border-top pt-2">
+            <strong class="kai-text-orange fs-4"
+              >Rp {{ "{:,.0f}".format(total) }}</strong
+            >
+          </dd>
+        </dl>
+
+        <hr />
+
+        <form
+          action="{{ url_for('proses_pembayaran', id_jadwal=jadwal.id) }}"
+          method="POST"
+        >
+          <div class="mb-3">
+            <label for="metode_pembayaran" class="form-label fs-5"
+              >Pilih Metode Pembayaran</label
+            >
+            <select
+              class="form-select"
+              id="metode_pembayaran"
+              name="metode_pembayaran"
+              required
+            >
+              <option value="" disabled selected>-- Pilih salah satu --</option>
+              <option value="Virtual Account BCA">Virtual Account BCA</option>
+              <option value="Virtual Account Mandiri">
+                Virtual Account Mandiri
+              </option>
+              <option value="Gerai Indomaret">Gerai Indomaret</option>
+              <option value="Gerai Alfamart">Gerai Alfamart</option>
+              <option value="QRIS">QRIS</option>
+            </select>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-lg kai-bg-orange text-white">
+              Lanjutkan Pembayaran
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
