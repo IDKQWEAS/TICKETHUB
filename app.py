@@ -16,6 +16,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'kunci-rahasia-yang-sangat-sulit-ditebak'
 db_uri = os.environ.get('DATABASE_URL')
 if db_uri:
+    if db_uri.startswith("mysql://"):
+        db_uri = db_uri.replace("mysql://", "mysql+pymysql://", 1)
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 else:
     # Fallback ke database lokal jika tidak di-deploy (untuk testing)
